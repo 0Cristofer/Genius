@@ -1,5 +1,5 @@
 //Genius
-//teste123
+//test
 #include <TrueRandom.h>
 
 const int buttonPin1 = 8;
