@@ -2,7 +2,7 @@
 
 #include <TrueRandom.h>
 
-const int buttonPin1 = 9;
+const int buttonPin1 = 8;
 const int buttonPin2 = 9;
 const int buttonPin3 = 10;
 const int buttonPin4 = 11;
