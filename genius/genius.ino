@@ -15,6 +15,7 @@ int ledPin[4] = { 2, 3, 4, 5 };
 int ledOrder[5];
 int buttonOrder[5];
 int level;
+int dly;
 
 void setup(){
   Serial.begin(9600);
@@ -46,7 +47,8 @@ void loop() {
 
 void level0() {  
   delay(2000);
-  level = 0;
+  level = 1;
+  dly = 500;
   Serial.println(level);
   a = TrueRandom.random(0,4);
   ledOrder[0] = a;
@@ -70,12 +72,13 @@ void level0() {
 
 void level1() {
   delay(2000);
-  level = 1;
+  level = 2;
+  dly = 400;
   Serial.println(level);
   b = TrueRandom.random(0,4);
   ledOrder[1] = b;
   led1();
-  delay(500);
+  delay(dly);
   led2();
   waitButton();
   checkTime();
@@ -110,13 +113,14 @@ void level1() {
 
 void level2(){
   delay(2000);
-  level = 2;
+  level = 3;
+  dly = 300;
   c = TrueRandom.random(0,4);
   ledOrder[2] = c;
   led1();
-  delay(500);
+  delay(dly);
   led2();
-  delay(500);
+  delay(dly);
   led3();
   waitButton();
   checkTime();
@@ -151,15 +155,16 @@ void level2(){
 
 void level3(){
   delay(2000);
-  level = 3;
+  level = 4;
+  dly = 200;
   d = TrueRandom.random(0,4);
   ledOrder[3] = d;
   led1();
-  delay(500);
+  delay(dly);
   led2();
-  delay(500);
+  delay(dly);
   led3();
-  delay(500);
+  delay(dly);
   led4();
   waitButton();
   checkTime();
@@ -202,17 +207,18 @@ void level3(){
 
 void level4(){
   delay(2000);
-  level = 3;
+  level = 5;
+  dly = 100;
   e = TrueRandom.random(0,4);
   ledOrder[4] = e;
   led1();
-  delay(500);
+  delay(dly);
   led2();
-  delay(500);
+  delay(dly);
   led3();
-  delay(500);
+  delay(dly);
   led4();
-  delay(500);
+  delay(dly);
   led5();
   waitButton();
   checkTime();
@@ -263,31 +269,31 @@ void level4(){
 
 void led1(){
   digitalWrite(ledPin[a], HIGH);
-  delay(400);
+  delay(dly);
   digitalWrite(ledPin[a], LOW);
 }
 
 void led2(){
   digitalWrite(ledPin[b], HIGH);
-  delay(400);
+  delay(dly);
   digitalWrite(ledPin[b], LOW);
 }
 
 void led3(){
   digitalWrite(ledPin[c], HIGH);
-  delay(400);
+  delay(dly);
   digitalWrite(ledPin[c], LOW);
 }
 
 void led4(){
   digitalWrite(ledPin[d], HIGH);
-  delay(400);
+  delay(dly);
   digitalWrite(ledPin[d], LOW);
 }
 
 void led5(){
   digitalWrite(ledPin[e], HIGH);
-  delay(300);
+  delay(dly);
   digitalWrite(ledPin[e], LOW);
 }
 
@@ -299,7 +305,21 @@ void getButtonState() {
 }
 
 void waitButton(){
-  time = 0;
+  if(level == 1){
+    time = (dly / 5);
+  }
+  else if(level == 2){
+    time = (dly / 2);
+  }
+  else if(level == 3){
+    time = dly;
+  }
+  else if(level == 4){
+    time = dly * 2.5;
+  }
+  else if(level == 5){
+    time = dly * 10;
+  }
   getButtonState();
   Serial.println("while");
   while (button1State == LOW && button2State == LOW && button3State == LOW && button4State == LOW && time <= 2000){
