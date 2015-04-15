@@ -187,10 +187,10 @@ void level3(){
       buttonCounter++;
       getButtonOrder();
       if(ledOrder[2] == buttonOrder[2]){
-        led2();
+        led3();
      	waitButton();
-   	    checkTime();
-   	 	checkBug();
+        checkTime();
+  	checkBug();
         buttonCounter++;
         getButtonOrder();
         if(ledOrder[3] == buttonOrder[3]){
