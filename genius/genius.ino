@@ -5,17 +5,17 @@
 const int buttonPin1 = 8;
 const int buttonPin2 = 9;
 const int buttonPin3 = 10;
-const int buttonPin4 = 11;
-int time = 0;
-int buttonCounter = 0;
-int gameState = 0;
-int button1State, button2State, button3State, button4State;
-int a, b, c, d, e;
-int ledPin[4] = { 2, 3, 4, 5 };
-int ledOrder[5];
-int buttonOrder[5];
-int level;
-int dly;
+const int buttonPin4 = 11; //Set buttons pins
+int time = 0; //Set the time of 'waiting button'
+int buttonCounter = 0; //Used to set the stage of the button counter
+int gameState = 0; //gameState = 0 means 'everything ok' = 1 means 'you made somthing worng
+int button1State, button2State, button3State, button4State; //Defines the state of the buttons
+int a, b, c, d, e; //Randon numbers witch are stored in an array
+int ledPin[4] = { 2, 3, 4, 5 }; //Contains the pins of the leds
+int ledOrder[5]; //Stores the randon number to compare them with the 'buttonOrder'
+int buttonOrder[5]; //Stores witch buttons were pressed
+int level; //Used to make some 'if' conditions
+int dly; //Sets the delay between leds and the time you have to press the button
 
 void setup(){
   Serial.begin(9600);
@@ -27,7 +27,7 @@ void setup(){
   pinMode(buttonPin2, INPUT);
   pinMode(buttonPin3, INPUT);
   pinMode(buttonPin4, INPUT);
-}
+} //Sets the pins
 
 void loop() {
   do {
@@ -35,50 +35,51 @@ void loop() {
     Serial.println(gameState);
     level0();
   }
-  while (gameState == 0);
-  if (gameState == 1){
+  while (gameState == 0); //While you did nothing wrong the game flows
+  if (gameState == 1){ //If you did something wrong the game stops, blinks the leds and restarts
     Serial.println("erro");
     blinkLeds();
     blinkLeds();
     blinkLeds();
     delay(2000);
+    gameState = 0;
   }
 }
 
 void level0() {  
-  delay(2000);
-  level = 1;
-  dly = 500;
+  delay(2000); //Wait 2 seconds to start the game
+  level = 1; //We are in level 1
+  dly = 500; //Sets the delay time
   Serial.println(level);
-  a = TrueRandom.random(0,4);
-  ledOrder[0] = a;
-  led1();
-  waitButton();
-  checkTime();
-  checkBug();
-  buttonCounter = 0;
-  getButtonOrder();
-  if (ledOrder[0] == buttonOrder[0]) {
-    led1();
-    level1();
+  a = TrueRandom.random(0,4); //Random a nunbem between 0 and 3
+  ledOrder[0] = a; //And stores it here
+  led1(); //Blinks the first random led
+  waitButton(); //Commentary below
+  checkTime(); //Commentary below
+  checkBug(); //Commentary below
+  buttonCounter = 0; //First button you press
+  getButtonOrder(); //Commentary below
+  if (ledOrder[0] == buttonOrder[0]) { //If the button pressed is right
+    led1(); //Blinks the first led if you are right
+    level1(); //Calls level 1
   }
   else {
     Serial.println("lvl0");
     Serial.println(ledOrder[0]);
     Serial.println(buttonOrder[0]);
-    gameState = 1;
+    gameState = 1; //If the button is wrong stop the game
   }
 }
 
 void level1() {
   delay(2000);
   level = 2;
-  dly = 400;
+  dly = 400; //Each level the time you have decreases
   Serial.println(level);
   b = TrueRandom.random(0,4);
   ledOrder[1] = b;
   led1();
-  delay(dly);
+  delay(dly); //Waits the specified time between leds
   led2();
   waitButton();
   checkTime();
@@ -90,7 +91,7 @@ void level1() {
     waitButton();
     checkTime();
     checkBug();
-    buttonCounter++;
+    buttonCounter++; //Second button you press
     getButtonOrder();
     Serial.println(ledOrder[1]);
     Serial.println(buttonOrder[1]);
@@ -267,7 +268,7 @@ void level4(){
   }
 }
 
-void led1(){
+void led1(){ //The random nunbem is between 0 and 3 so the led that will be on is called by the array
   digitalWrite(ledPin[a], HIGH);
   delay(dly);
   digitalWrite(ledPin[a], LOW);
@@ -297,15 +298,15 @@ void led5(){
   digitalWrite(ledPin[e], LOW);
 }
 
-void getButtonState() {
+void getButtonState() { //Verifies if the buttons are 'on' or 'off'
   button1State = digitalRead(buttonPin1);
   button2State = digitalRead(buttonPin2);
   button3State = digitalRead(buttonPin3);
   button4State = digitalRead(buttonPin4);
 }
 
-void waitButton(){
-  if(level == 1){
+void waitButton(){ //This function waits for the player to push a button
+  if(level == 1){ //Each level the player has less time to press
     time = (dly / 5);
   }
   else if(level == 2){
@@ -322,28 +323,28 @@ void waitButton(){
   }
   getButtonState();
   Serial.println("while");
-  while (button1State == LOW && button2State == LOW && button3State == LOW && button4State == LOW && time <= 2000){
-    getButtonState();  
-    delay(1);
-    time++;
+  while (button1State == LOW && button2State == LOW && button3State == LOW && button4State == LOW && time <= 2000){ //While all buttos are 'low' and the time is lower than 2000ms
+    getButtonState(); //Verifies the state
+    delay(1); //Wait a milisecond
+    time++; //Increase time
   }
   Serial.println("while3");
 }
 
-void checkTime(){
+void checkTime(){ //If the player didnt pushed a button in some time (depends on the level) gameState changes to 1 and the game is over 
   if (time > 2000){
   Serial.println("tempo");
   gameState = 1;
   }
 }
 
-void getButtonOrder(){
+void getButtonOrder(){ //Get your button and puts it into an array
   Serial.println("order");
-  if (buttonCounter == 0) {
+  if (buttonCounter == 0) { //If it is the first button
     Serial.println("order00");
     if (button1State == HIGH) {
        Serial.println("order0");
-      buttonOrder[0] = 0;
+      buttonOrder[0] = 0; //Puts in first array
     }
     else if (button2State == HIGH) {
        Serial.println("order1");
@@ -358,11 +359,11 @@ void getButtonOrder(){
       buttonOrder[0] = 3;
     }
   }
-  if (buttonCounter == 1) {
+  if (buttonCounter == 1) { //Second
     Serial.println("order01");
     if (button1State == HIGH) {
       Serial.println("order10");
-      buttonOrder[1] = 0;
+      buttonOrder[1] = 0; //Second array
     }
     else if (button2State == HIGH) {
       Serial.println("order11");
@@ -435,7 +436,7 @@ void getButtonOrder(){
   }
 }
 
-void blinkLeds(){
+void blinkLeds(){ //This function blinks all leds with a 200ms delay
   digitalWrite(ledPin[0], HIGH);
   digitalWrite(ledPin[1], HIGH);
   digitalWrite(ledPin[2], HIGH);
@@ -448,7 +449,7 @@ void blinkLeds(){
   delay(200);
 }
 
-void checkBug(){
+void checkBug(){ //If the player pushes 2 or more buttons the gameStates changes to 1
   if (button1State == HIGH && button2State == HIGH){
     Serial.println("errooo");
     gameState = 1;
@@ -475,7 +476,7 @@ void checkBug(){
   }
 }  
 
-void youWin(){
+void youWin(){ //Blinks the leds 5 times
   Serial.println("WINNNN");
   blinkLeds();
   blinkLeds();
